@@ -1,8 +1,5 @@
--- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
---
+-- MySQL dump for entire database (blog)
 -- Host: localhost    Database: blog
--- ------------------------------------------------------
--- Server version	8.0.39
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -15,10 +12,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
---
 -- Table structure for table `users`
---
-
 DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -32,17 +26,39 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
 -- Dumping data for table `users`
---
-
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (2,'syrine','syrine@gmail.com','$2a$10$738ujTCV4NcZNh/TECZtVeWKDLART3it3vjokmpqD7Q9ZT3v4BG6a',NULL),(3,'1','1','$2a$10$TrowFdIML42pkAfuSY9RLuhiB2/5PuMp6VGy0cIcxWHG6P3O0Cuxa',NULL);
+INSERT INTO `users` VALUES (2,'syrine','syrine@gmail.com','$2a$10$738ujTCV4NcZNh/TECZtVeWKDLART3it3vjokmpqD7Q9ZT3v4BG6a',NULL),
+(3,'1','1','$2a$10$TrowFdIML42pkAfuSY9RLuhiB2/5PuMp6VGy0cIcxWHG6P3O0Cuxa',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+-- Table structure for table `posts`
+DROP TABLE IF EXISTS `posts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `posts` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `desc` varchar(1000) NOT NULL,
+  `img` varchar(255) NOT NULL,
+  `date` datetime NOT NULL,
+  `uid` int NOT NULL,
+  `cat` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `uid_idx` (`uid`),
+  CONSTRAINT `uid` FOREIGN KEY (`uid`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- Dumping data for table `posts`
+LOCK TABLES `posts` WRITE;
+/*!40000 ALTER TABLE `posts` DISABLE KEYS */;
+/*!40000 ALTER TABLE `posts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
@@ -50,5 +66,3 @@ UNLOCK TABLES;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2024-09-28 23:15:27
