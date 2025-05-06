@@ -63,11 +63,8 @@ const Home = () => {
         {posts.map((post) => (
           <div className="post" key={post.id}>
             <div className="img">
-<<<<<<< HEAD
               <img src={`${post.img}`} alt="" />
-=======
             <img src={post.img} alt={post.title} />
->>>>>>> 013f85f0ec06782e3a25616acb5a4a85a7c6969a
             </div>
             <div className="content">
               <Link className="link" to={`/post/${post.id}`}>
