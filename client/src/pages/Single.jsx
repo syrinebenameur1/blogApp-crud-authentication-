@@ -1,80 +1,96 @@
-import React, { useEffect, useState } from "react";
-import Edit from "../img/edit.png";
-import Delete from "../img/delete.png";
+// src/pages/Single.jsx
+import React, { useEffect, useState, useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Menu from "../components/Menu";
 import axios from "axios";
 import moment from "moment";
-import { useContext } from "react";
-import { AuthContext } from "../context/authContext";
 import DOMPurify from "dompurify";
+
+import EditIcon from "../img/edit.png";
+import DeleteIcon from "../img/delete.png";
+import Menu from "../components/Menu";
+import { AuthContext } from "../context/authContext";
 
 const Single = () => {
   const [post, setPost] = useState({});
-
   const location = useLocation();
   const navigate = useNavigate();
-
-  const postId = location.pathname.split("/")[2];
-  console.log(postId);
-
   const { currentUser } = useContext(AuthContext);
 
+  // extract postId from URL: e.g. "/post/123"
+  const postId = location.pathname.split("/")[2];
+
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchPost = async () => {
       try {
         const res = await axios.get(`/posts/${postId}`);
         setPost(res.data);
       } catch (err) {
-        console.log(err);
+        console.error("Failed to load post:", err);
       }
     };
-    fetchData();
+    fetchPost();
   }, [postId]);
 
-  const handleDelete = async ()=>{
+  const handleDelete = async () => {
     try {
       await axios.delete(`/posts/${postId}`);
-      navigate("/")
+      navigate("/");
     } catch (err) {
-      console.log(err);
+      console.error("Delete failed:", err);
     }
-  }
-
-  const getText = (html) =>{
-    const doc = new DOMParser().parseFromString(html, "text/html")
-    return doc.body.textContent
-  }
+  };
 
   return (
     <div className="single">
       <div className="content">
-        <img src={`${post?.img}`} alt="" />
+        {/* Featured image */}
+        {post.img && <img className="postImg" src={post.img} alt={post.title} />}
+
+        {/* Author info and edit/delete buttons */}
         <div className="user">
-          {post.userImg && <img
-            src={post.userImg}
-            alt=""
-          />}
+          {post.userImg && (
+            <img className="userImg" src={post.userImg} alt={post.username} />
+          )}
           <div className="info">
-            <span>{post.username}</span>
-            <p>Posted {moment(post.date).fromNow()}</p>
+            <span className="username">{post.username}</span>
+            <p className="postDate">
+              Posted {moment(post.date).fromNow()}
+            </p>
           </div>
-          {currentUser && currentUser.username === post.username && (
+          {currentUser?.username === post.username && (
             <div className="edit">
-              <Link to={`/write?edit=2`} state={post}>
-                <img src={Edit} alt="" />
+              <Link
+                to={`/write`}
+                state={post}
+              >
+                <img src={EditIcon} alt="Edit post" />
               </Link>
-              <img onClick={handleDelete} src={Delete} alt="" />
+              <img
+                onClick={handleDelete}
+                src={DeleteIcon}
+                alt="Delete post"
+              />
             </div>
           )}
         </div>
-        <h1>{post.title}</h1>
-        <p
+
+        {/* Title */}
+        <h1 className="postTitle"          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(post.title || ""),
+          }}>
+       </h1>
+
+        {/* Sanitized HTML description */}
+        <div
+          className="postDesc"
           dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(post.desc),
+            __html: DOMPurify.sanitize(post.desc || ""),
           }}
-        ></p>      </div>
-      <Menu cat={post.cat}/>
+        />
+      </div>
+
+      {/* Sidebar/menu */}
+      <Menu cat={post.cat} />
     </div>
   );
 };

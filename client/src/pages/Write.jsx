@@ -7,8 +7,9 @@ import moment from "moment";
 
 const Write = () => {
   const state = useLocation().state;
-  const [value, setValue] = useState(state?.title || "");
-  const [title, setTitle] = useState(state?.desc || "");
+  const [value, setValue] = useState(state?.desc || "");
+  const [title, setTitle] = useState(state?.title || "");
+  
   const [file, setFile] = useState(null);
   const [cat, setCat] = useState(state?.cat || "");
 
@@ -18,12 +19,17 @@ const Write = () => {
     try {
       const formData = new FormData();
       formData.append("file", file);
-      const res = await axios.post("/upload", formData);
+      // because of your CRA proxy, this goes to http://localhost:8000/api/upload
+      const res = await axios.post("/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      // res.data === "/uploads/123456789.jpg"
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error("Upload failed:", err);
     }
   };
+  
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -166,3 +172,4 @@ const Write = () => {
 };
 
 export default Write;
+

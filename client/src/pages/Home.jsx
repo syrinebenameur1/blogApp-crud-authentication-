@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
+import DOMPurify from "dompurify";
+
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -69,9 +71,18 @@ const Home = () => {
             </div>
             <div className="content">
               <Link className="link" to={`/post/${post.id}`}>
-                <h1>{post.title}</h1>
+              <h1 className="postTitle"          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(post.title || ""),
+          }}>
+       </h1>
 
-              <p>{getText(post.desc)}</p>
+        {/* Sanitized HTML description */}
+        <div
+          className="postDesc"
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(post.desc || ""),
+          }}
+        />
               <button>Read More</button>
               </Link>
             </div>
