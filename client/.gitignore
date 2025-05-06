@@ -4,6 +4,14 @@
 /node_modules
 /.pnp
 .pnp.js
+# dependencies
+node_modules/
+
+# uploaded images
+uploads/
+
+# your environment file
+api/.env
 
 # testing
 /coverage

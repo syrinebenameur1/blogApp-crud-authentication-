@@ -47,16 +47,23 @@ const Menu = ({cat}) => {
       <h1>Other posts you may like</h1>
 
       {posts.map((post) => (
+<<<<<<< HEAD
 
         <div className="post" key={post.id}>
           <Link className="link" to={`/post/${post.id}`}>
 
+=======
+        <Link className="link" to={`/post/${post.id}`}>
+
+        <div className="post" key={post.id}>
+>>>>>>> 013f85f0ec06782e3a25616acb5a4a85a7c6969a
           <img src={`${post?.img}`} alt="" />
           <h2>{post.title}</h2>
           <button>Read More</button>
           </Link> 
 
         </div>
+        </Link>
       ))}
     </div>
   );
