@@ -1,12 +1,16 @@
 import mysql from "mysql2";
+import dotenv from "dotenv";
 
-// Create a connection to the MySQL database
-export const db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "Syrine2024",
-    database: "blog"
-});
+// Load environment variables
+dotenv.config();
+
+// Create database connection pool
+export const db = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+}).promise();
 
 // Connect to the database
 db.connect((err) => {
