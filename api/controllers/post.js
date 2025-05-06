@@ -1,5 +1,9 @@
 import { db } from "../db.js"
 import jwt from "jsonwebtoken"
+import dotenv from "dotenv"
+
+// Load environment variables
+dotenv.config();
 
 export const addPost = (req,res) => {
 
@@ -42,7 +46,7 @@ if (!token) return res.status(401).json ("not authentificated");
 
 jwt.verify(
   
-  token, "key" ,
+  token, process.env.JWT_SECRET,
    (err,userInfo)=> {
   if (err) return res.status(403).json ("token is not valid");
 
